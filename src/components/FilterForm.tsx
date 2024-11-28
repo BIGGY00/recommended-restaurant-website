@@ -67,6 +67,7 @@ export const FilterForm = ({ onSubmit }: FilterFormProps) => {
   const [budget, setBudget] = useState("");
   const [restaurantType, setRestaurantType] = useState("");
   const [selectedFoodTypes, setSelectedFoodTypes] = useState<string[]>([]);
+  const [selectAll, setSelectAll] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,12 +81,18 @@ export const FilterForm = ({ onSubmit }: FilterFormProps) => {
       budgetMin: selectedBudget.min,
       budgetMax: selectedBudget.max,
       restaurantType: restaurantType === "Any Type" ? null : restaurantType,
-      foodTypes: selectedFoodTypes.length > 0 ? selectedFoodTypes : null, // Send null if no food types are selected
+      foodTypes: selectedFoodTypes.length > 0 ? selectedFoodTypes : null,
     });
   };
 
   const handleClearFoodTypes = () => {
     setSelectedFoodTypes([]); // Clears the selection
+    setSelectAll(false);
+  };
+
+  const handleSelectAll = (checked: boolean) => {
+    setSelectAll(checked);
+    setSelectedFoodTypes(checked ? [...foodTypes] : []);
   };
 
   return (
@@ -148,6 +155,19 @@ export const FilterForm = ({ onSubmit }: FilterFormProps) => {
           {/* Food Types Selection */}
           <div>
             <label className="block text-sm font-medium mb-2">Food Types</label>
+            <div className="flex items-center space-x-2 mb-4">
+              <Checkbox
+                id="select-all"
+                checked={selectAll}
+                onCheckedChange={handleSelectAll}
+              />
+              <label
+                htmlFor="select-all"
+                className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Select All
+              </label>
+            </div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {foodTypes.map((type) => (
                 <div key={type} className="flex items-center space-x-2">
@@ -160,6 +180,7 @@ export const FilterForm = ({ onSubmit }: FilterFormProps) => {
                           ? [...selectedFoodTypes, type]
                           : selectedFoodTypes.filter((t) => t !== type)
                       );
+                      if (!checked) setSelectAll(false); // Uncheck "Select All" if any food type is deselected
                     }}
                   />
                   <label
