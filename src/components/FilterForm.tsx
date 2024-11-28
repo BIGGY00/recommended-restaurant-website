@@ -12,6 +12,7 @@ import { Card } from "@/components/ui/card";
 
 const runnerTypes = ["Fun Run", "Mini Marathon", "Half Marathon", "Marathon"];
 const budgetRanges = [
+  { min: null, max: null, label: "Any Budget" },
   { min: 0, max: 300, label: "0 - 300 Baht" },
   { min: 301, max: 600, label: "301 - 600 Baht" },
   { min: 601, max: 900, label: "601 - 900 Baht" },
@@ -22,11 +23,13 @@ const budgetRanges = [
   { min: 2101, max: 999999, label: "More than 2100 Baht" },
 ];
 const restaurantTypes = [
+  "Any Type",
   "Kiosk_Type",
   "Fast_Dining_Type",
   "Casual_Dining_Type",
   "Fine_Dining_Type",
 ];
+
 const foodTypes = [
   "ALaCarte_Type",
   "Bakery_Cake_Type",
@@ -69,21 +72,27 @@ export const FilterForm = ({ onSubmit }: FilterFormProps) => {
     e.preventDefault();
     const selectedBudget = budgetRanges.find(
       (range) => range.label === budget
-    ) || { min: 0, max: 999999 };
+    ) || { min: null, max: null };
 
+    // Send the selected filters, sending null for 'Any' or unselected options
     onSubmit({
-      runnerType,
+      runnerType: runnerType === "Any" ? null : runnerType,
       budgetMin: selectedBudget.min,
       budgetMax: selectedBudget.max,
-      restaurantType,
-      foodTypes: selectedFoodTypes,
+      restaurantType: restaurantType === "Any Type" ? null : restaurantType,
+      foodTypes: selectedFoodTypes.length > 0 ? selectedFoodTypes : null, // Send null if no food types are selected
     });
+  };
+
+  const handleClearFoodTypes = () => {
+    setSelectedFoodTypes([]); // Clears the selection
   };
 
   return (
     <Card className="p-6 bg-white shadow-lg">
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-4">
+          {/* Runner Type Selection */}
           <div>
             <label className="block text-sm font-medium mb-2">Runner Type</label>
             <Select onValueChange={setRunnerType}>
@@ -100,6 +109,7 @@ export const FilterForm = ({ onSubmit }: FilterFormProps) => {
             </Select>
           </div>
 
+          {/* Budget Range Selection */}
           <div>
             <label className="block text-sm font-medium mb-2">Budget Range</label>
             <Select onValueChange={setBudget}>
@@ -116,6 +126,7 @@ export const FilterForm = ({ onSubmit }: FilterFormProps) => {
             </Select>
           </div>
 
+          {/* Restaurant Type Selection */}
           <div>
             <label className="block text-sm font-medium mb-2">
               Restaurant Type
@@ -127,13 +138,14 @@ export const FilterForm = ({ onSubmit }: FilterFormProps) => {
               <SelectContent>
                 {restaurantTypes.map((type) => (
                   <SelectItem key={type} value={type}>
-                    {type.replace(/_/g, " ")}
+                    {type}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
 
+          {/* Food Types Selection */}
           <div>
             <label className="block text-sm font-medium mb-2">Food Types</label>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
