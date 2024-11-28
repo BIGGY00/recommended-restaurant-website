@@ -111,8 +111,8 @@ export const ResultsTable = ({
                   <TableCell className="font-medium">
                     {restaurant.restaurant_name}
                   </TableCell>
-                  <TableCell>{restaurant.restaurant_type}</TableCell>
                   <TableCell>{restaurant.food_type}</TableCell>
+                  <TableCell>{restaurant.restaurant_type}</TableCell>
                   <TableCell>{restaurant.restaurant_nationality}</TableCell>
                   <TableCell>{restaurant.clean_min_budget}</TableCell>
                   <TableCell>{restaurant.clean_max_budget}</TableCell>
