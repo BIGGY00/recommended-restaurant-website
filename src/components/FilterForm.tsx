@@ -55,8 +55,10 @@ const foodTypes = [
   "Sushi_Type",
   "VegatarianFood_Type",
   "Vegatarian_Jay_Type",
-  "Burger_Type"
+  "Burger_Type",
 ];
+
+const nutrientLevels = ["Any", "Low", "Medium", "High"];
 
 interface FilterFormProps {
   onSubmit: (filters: any) => void;
@@ -68,6 +70,10 @@ export const FilterForm = ({ onSubmit }: FilterFormProps) => {
   const [restaurantType, setRestaurantType] = useState("");
   const [selectedFoodTypes, setSelectedFoodTypes] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState(false);
+
+  const [carb, setCarb] = useState("Any");
+  const [protein, setProtein] = useState("Any");
+  const [fat, setFat] = useState("Any");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -82,6 +88,9 @@ export const FilterForm = ({ onSubmit }: FilterFormProps) => {
       budgetMax: selectedBudget.max,
       restaurantType: restaurantType === "Any Type" ? null : restaurantType,
       foodTypes: selectedFoodTypes.length > 0 ? selectedFoodTypes : null,
+      carb: carb === "Any" ? null : carb,
+      protein: protein === "Any" ? null : protein,
+      fat: fat === "Any" ? null : fat,
     });
   };
 
@@ -101,7 +110,9 @@ export const FilterForm = ({ onSubmit }: FilterFormProps) => {
         <div className="space-y-4">
           {/* Runner Type Selection */}
           <div>
-            <label className="block text-sm font-medium mb-2">Runner Type</label>
+            <label className="block text-sm font-medium mb-2">
+              Runner Type
+            </label>
             <Select onValueChange={setRunnerType}>
               <SelectTrigger>
                 <SelectValue placeholder="Select runner type" />
@@ -118,7 +129,9 @@ export const FilterForm = ({ onSubmit }: FilterFormProps) => {
 
           {/* Budget Range Selection */}
           <div>
-            <label className="block text-sm font-medium mb-2">Budget Range</label>
+            <label className="block text-sm font-medium mb-2">
+              Budget Range
+            </label>
             <Select onValueChange={setBudget}>
               <SelectTrigger>
                 <SelectValue placeholder="Select budget range" />
@@ -191,6 +204,61 @@ export const FilterForm = ({ onSubmit }: FilterFormProps) => {
                   </label>
                 </div>
               ))}
+            </div>
+          </div>
+
+          <div className="flex flex-wrap justify-between gap-4">
+            {/* Carbohydrate Level */}
+            <div className="flex-1 min-w-[150px]">
+              <label className="block text-sm font-medium mb-2">
+                Carbohydrate
+              </label>
+              <Select onValueChange={setCarb}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select carbohydrate" />
+                </SelectTrigger>
+                <SelectContent>
+                  {nutrientLevels.map((level) => (
+                    <SelectItem key={level} value={level}>
+                      {level}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Protein Level */}
+            <div className="flex-1 min-w-[150px]">
+              <label className="block text-sm font-medium mb-2">Protein</label>
+              <Select onValueChange={setProtein}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select protein" />
+                </SelectTrigger>
+                <SelectContent>
+                  {nutrientLevels.map((level) => (
+                    <SelectItem key={level} value={level}>
+                      {level}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Fat Level */}
+            <div className="flex-1 min-w-[150px]">
+              <label className="block text-sm font-medium mb-2">Fat</label>
+              <Select onValueChange={setFat}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select fat" />
+                </SelectTrigger>
+                <SelectContent>
+                  {nutrientLevels.map((level) => (
+                    <SelectItem key={level} value={level}>
+                      {level}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
         </div>
